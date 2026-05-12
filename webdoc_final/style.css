@@ -1,0 +1,236 @@
+/* --- CONFIGURATION & VARIABLES --- */
+:root {
+    --bg-dark: #020408;
+    --accent: #f1c40f;
+    --text-light: #e0e6ed;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-bright: rgba(255, 255, 255, 0.12);
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* --- FOND ÉTOILÉ --- */
+#star-canvas {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at center, #11141d 0%, #020408 100%);
+}
+
+/* --- TYPOGRAPHIE --- */
+h1, h2, h3, .nav-link, .node span {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: var(--accent);
+    margin-bottom: 25px;
+    border-left: 4px solid var(--accent);
+    padding-left: 15px;
+}
+
+/* --- NAVIGATION CLASSIQUE (Utilisée sur les pages de contenu) --- */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(2, 4, 8, 0.9);
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border);
+}
+
+nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 0.8rem;
+    font-family: 'Orbitron';
+    transition: 0.3s;
+    opacity: 0.7;
+}
+
+nav a:hover, nav a.active {
+    color: var(--accent);
+    opacity: 1;
+    text-shadow: 0 0 10px var(--accent);
+}
+
+/* --- STRUCTURE DES PAGES DE CONTENU --- */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+    animation: fadeIn 1s ease-out;
+}
+
+.card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    padding: 50px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}
+
+.media-placeholder {
+    width: 100%;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px dashed var(--border);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px 0;
+    color: #4a4d52;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+/* --- STYLE DU HUB (ACCUEIL) --- */
+.hub-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px;
+    z-index: 1;
+}
+
+.hub-header { text-align: center; margin-top: 20px; }
+
+.constellation-nav {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.constellation-lines {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+
+.constellation-lines line {
+    /* 1. Couleur de la ligne de base (Blanc avec 90% d'opacité pour la douceur) */
+    stroke: rgba(255, 255, 255, 0.9);
+
+    /* 2. Épaisseur (Un peu plus épais pour porter le "glow") */
+    stroke-width: 1.2;
+
+    /* 3. Ligne pleine (Le style "dashed" casse l'effet brillant) */
+    stroke-dasharray: none;
+
+    /* 4. L'EFFET BRILLANT (GLOW) */
+    /* C'est la propriété clé : drop-shadow(x-offset y-offset rayon-flou couleur) */
+    /* On applique un flou blanc tout autour de la ligne */
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
+}
+
+/* --- LES NOEUDS (BULLES) --- */
+.node {
+    position: absolute;
+    z-index: 10;
+    text-decoration: none;
+    transform: translate(-50%, -50%);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.node-content {
+    width: 100px; /* On agrandit un peu la bulle */
+    height: 100px;
+    background: rgba(80, 80, 80, 0.6); /* Fond plus sombre pour mieux voir le texte */
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    transition: 0.3s;
+}
+/* LE TEXTE DES ÉTOILES */
+.node span {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem; /* Plus grand pour la lisibilité */
+    font-weight: 700;
+    color: var(--accent); /* Couleur Or pour rappeler les étoiles */
+    text-align: center;
+    letter-spacing: 1.5px;
+    padding: 5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Ombre pour détacher du fond */
+}
+
+/* Effets au survol */
+.node:hover .node-content {
+    border-color: var(--accent);
+    background: rgba(241, 196, 15, 0.15);
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.5);
+    transform: scale(1.1);
+}
+
+.node:hover span {
+    color: #fff; /* Le texte devient blanc au survol */
+    text-shadow: 0 0 10px var(--accent);
+}
+
+/* Positions des nodes */
+.n1 { top: 25%; left: 40%; }
+.n2 { top: 35%; left: 65%; }
+.n3 { top: 55%; left: 75%; }
+.n4 { top: 75%; left: 55%; }
+.n5 { top: 70%; left: 30%; }
+.n6 { top: 45%; left: 20%; }
+
+/* --- BOUTONS SUIVANT --- */
+.next-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+    padding-top: 30px;
+}
+
+.next-btn {
+    padding: 12px 30px;
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    font-family: 'Orbitron';
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: 0.4s;
+}
+
+.next-btn:hover {
+    background: var(--accent);
+    color: #000;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
